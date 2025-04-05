@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model Users {
-  id Int @id
+  id String @id
   name String
   surname String
   email String @unique
@@ -21,11 +21,17 @@ model Users {
   createdAt DateTime @default(now())
 }
 model Homepage{
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   title String
   content String
   image String?
   source String?
   type String?
+  createdAt DateTime @default(now())
+}
+model Post{
+  id String @id @default(uuid())
+  title String
+  content String
   createdAt DateTime @default(now())
 }

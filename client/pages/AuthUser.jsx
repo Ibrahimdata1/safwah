@@ -1,18 +1,20 @@
 import { useState } from "react";
-import supabase from "./utils/supabaseClient.js";
+import supabase from "../utils/supabaseClient.js";
 import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-async function AuthUser() {
+import { useNavigate } from "react-router-dom";
+function AuthUser() {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -37,6 +39,7 @@ async function AuthUser() {
           email,
         });
         setMessage("Registered Success!");
+        navigate("/homepage");
       }
     } catch (error) {
       <Alert>Error Auth 500! {error}</Alert>;
@@ -58,7 +61,7 @@ async function AuthUser() {
                 type="name"
                 required
                 value={name}
-                onChange={(e = setName(e.target.value))}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -68,7 +71,7 @@ async function AuthUser() {
                 type="surname"
                 required
                 value={surname}
-                onChange={(e = setSurname(e.target.value))}
+                onChange={(e) => setSurname(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -78,7 +81,7 @@ async function AuthUser() {
                 type="email"
                 required
                 value={email}
-                onChange={(e = setEmail(e.target.value))}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -88,18 +91,18 @@ async function AuthUser() {
                 type="password"
                 required
                 value={password}
-                onChange={(e = setPassword(e.target.value))}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full">
-              {isLogin ? "SignIn" : "SIgnUp"}
+            <Button type="submit" className="w-full cursor-pointer">
+              {isLogin ? "SignIn" : "SignUp"}
             </Button>
           </form>
           <div className="text-sm text-center text-gray-600">
             {isLogin ? "No Account Yet?" : "Have Account Already?"}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline cursor-pointer"
             >
               {isLogin ? "Register" : "SignIn"}
             </button>

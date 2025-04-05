@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function Homepage() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white py-10 px-4 md:px-12">
       <div className="max-w-5xl mx-auto">
@@ -36,10 +37,10 @@ function Homepage() {
         </div>
         <div className="text-center mt-10">
           <Button
-            className="text-lg px-6 py-2"
-            onClick={() => <Navigate to="/newsfeed" />}
+            className="text-lg px-6 py-2 cursor-pointer"
+            onClick={() => navigate("/newsfeed")}
           >
-            Watch All News
+            Go to Feed
           </Button>
         </div>
       </div>
