@@ -33,7 +33,8 @@ function PostForm({ onPost }) {
         const newPost = {
           title,
           content,
-          image: selectedFile.name,
+          image: `http://localhost:8080/uploads/${selectedFile.name}`,
+          type: "users",
         };
         const res = await axios.post(
           "http://localhost:8080/api/newsFeed",
@@ -47,11 +48,13 @@ function PostForm({ onPost }) {
         const newPost = {
           title,
           content,
+          type: "users",
         };
         await axios.post("http://localhost:8080/api/newsFeed", newPost);
         onPost(newPost);
         setTitle("");
         setContent("");
+        setSelectedFile(null);
       }
     } catch (error) {
       console.error("error newsFeed 500", error);

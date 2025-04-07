@@ -15,13 +15,14 @@ router.get("/newsFeed", async (req, res) => {
   }
 });
 router.post("/newsFeed", async (req, res) => {
-  const { title, content, image } = req.body;
+  const { title, content, image, type } = req.body;
   try {
     const newPost = await prisma.Post.create({
       data: {
         title,
         content,
         image,
+        type,
       },
     });
     res.status(201).json({ data: newPost });
