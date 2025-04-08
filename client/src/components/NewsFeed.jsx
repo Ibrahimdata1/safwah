@@ -15,15 +15,13 @@ function NewsFeed() {
     setPosts((prev) => [newPost, ...prev]);
   };
   return (
-    <div className="min-h-screen bg-[#12121294] text-white py-10 px-4 md:px-12">
+    <div className="min-h-screen bg-[#121212e8] text-white py-10 px-4 md:px-12">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-4 text-center">📰 Safwah Feed</h1>
         <p className="text-center text-gray-400 mb-8">
           Share live news and new ideas
         </p>
-        <div className="bg-[#12121294]">
-          <PostForm onPost={handleNewPost} />
-        </div>
+        <PostForm onPost={handleNewPost} />
         <div className="space-y-6">
           {posts.map((post) => (
             <PostCard

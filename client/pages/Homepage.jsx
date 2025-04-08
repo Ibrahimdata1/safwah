@@ -1,10 +1,11 @@
 import NewsFeed from "@/components/NewsFeed";
-import { useNavigate } from "react-router-dom";
+import DashboardLayout from "@/components/DashboardLayout";
 function Homepage() {
-  const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-[#121212e0]">
-      <NewsFeed />
+    <div className="min-h-screen">
+      <DashboardLayout>
+        <NewsFeed />
+      </DashboardLayout>
     </div>
   );
 }
