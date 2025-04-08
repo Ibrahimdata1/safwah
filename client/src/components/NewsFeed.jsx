@@ -6,8 +6,8 @@ function NewsFeed() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const getFeed = async () => {
-      const res = await axios.get("http://localhost:8080/api/newsFeed");
-      setPosts(res.data.data);
+      const newsFeed = await axios.get("http://localhost:8080/api/newsFeed");
+      setPosts(newsFeed.data.data);
     };
     getFeed();
   }, []);
@@ -31,6 +31,7 @@ function NewsFeed() {
               title={post.title}
               content={post.content}
               image={post.image}
+              postId={post.id}
             />
           ))}
         </div>

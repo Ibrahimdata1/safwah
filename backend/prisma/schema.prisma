@@ -12,6 +12,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+model Comments{
+  id String @id @default(uuid())
+  comment String
+  createdAt DateTime @default(now())
+  post Post @relation(fields:[postId],references:[id],onDelete:Cascade)
+  postId String
+  user Users @relation(fields:[userId],references:[id],onDelete:Cascade)
+  userId String
+}
 model Users {
   id String @id
   name String
@@ -19,6 +28,8 @@ model Users {
   email String @unique
   password String
   createdAt DateTime @default(now())
+  comments Comments[]
+  likes Likes[]
 }
 
 model Post{
@@ -28,4 +39,14 @@ model Post{
   image String?
   type String
   createdAt DateTime @default(now())
+  comments Comments[]
+  likes Likes[]
+}
+model Likes{
+  id String @id @default(uuid())
+  userId String
+  postId String
+  user Users @relation(fields:[userId],references:[id],onDelete:Cascade)
+  post Post @relation(fields:[postId],references:[id],onDelete:Cascade)
+  @@unique([userId,postId])
 }
