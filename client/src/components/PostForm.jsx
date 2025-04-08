@@ -72,15 +72,15 @@ function PostForm({ onPost }) {
     }
   };
   return (
-    <div className="bg-gray-50 border rounded-xl p-4 mb-10">
+    <div className="bg-gray-50 border text-black rounded-xl p-4 mb-10">
       <h2 className="text-lg font-semibold mb-3">📢 Post Your Own Content</h2>
       <Input
         placeholder="Topic"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="mb-3"
+        className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 placeholder-gray-400"
       />
-      <div className="flex items-center gap-3 mb-3 cursor-pointer">
+      <div className="flex items-center gap-3 mb-3 mt-3 cursor-pointer">
         <Input type="file" onChange={handleUpload} />
         {selectedFile && (
           <span className="text-gray-700 text-sm truncate max-w-[200px]">
@@ -92,12 +92,13 @@ function PostForm({ onPost }) {
         placeholder="ContentPost"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="mb-3"
+        className="w-full px-4 py-2 mb-3 bg-gray-800 text-white rounded-lg border border-gray-600 placeholder-gray-400"
+        row="4"
       />
       {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
       <Button
         onClick={handlePost}
-        className="cursor-pointer flex items-center justifuy-center gap-2"
+        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 cursor-pointer rounded-lg transition"
         disabled={isLoading}
       >
         {isLoading && <Loader2 className="mr-2 h-4 animate-spin" />}
