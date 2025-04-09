@@ -1,5 +1,6 @@
 import { Home, Table, Users, Settings } from "lucide-react";
 import SidebarItem from "./SidebarItem";
+import NewThreadForm from "./NewThreadForm";
 function DashboardLayout({ children }) {
   return (
     <div className="grid grid-cols-12 min-h-screen ">
@@ -15,9 +16,9 @@ function DashboardLayout({ children }) {
         </nav>
       </aside>
       <main className="col-span-8">{children}</main>
-      <div className="col-span-2 p-4 hidden md:block text-gray-400 bg-[#121212d8]">
-        Empty Now
-      </div>
+      <aside className="col-span-2 p-4 hidden md:block text-gray-400 bg-[#121212d8]">
+        <NewThreadForm />
+      </aside>
     </div>
   );
 }

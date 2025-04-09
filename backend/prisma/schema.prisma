@@ -12,6 +12,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+model Threads{
+  id String @id @default(uuid())
+  topic String
+  content String
+  createdAt DateTime @default(now())
+  user Users @relation(fields:[userId],references:[id],onDelete:Cascade)
+  userId String
+  comments Comments[]
+}
 model Comments{
   id String @id @default(uuid())
   comment String
@@ -20,6 +29,8 @@ model Comments{
   postId String
   user Users @relation(fields:[userId],references:[id],onDelete:Cascade)
   userId String
+  thread Threads? @relation(fields:[threadId],references:[id],onDelete:Cascade)
+  threadId String?
 }
 model Users {
   id String @id
@@ -30,6 +41,7 @@ model Users {
   createdAt DateTime @default(now())
   comments Comments[]
   likes Likes[]
+  threads Threads[]
 }
 
 model Post{
