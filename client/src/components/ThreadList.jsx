@@ -1,15 +1,4 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-function ThreadList() {
-  const [threads, setThreads] = useState([]);
-  useEffect(() => {
-    const fetchThread = async () => {
-      const res = await axios.get("http://localhost:8080/api/allThreads");
-      setThreads(res.data.data);
-      console.log("fetchThreads", res.data.data);
-    };
-    fetchThread();
-  }, []);
+function ThreadList({ threads }) {
   return (
     <div className="bg-gray-800 p-4 rounded-lg space-y-2">
       <h3 className="text-white text-lg font-semibold mb-2">Latest Thread</h3>

@@ -1,13 +1,22 @@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ThreadList from "./ThreadList";
 import supabase from "../../utils/supabaseClient";
 function NewThreadForm() {
   const [topic, setTopic] = useState("");
   const [content, setContent] = useState("");
+  const [threads, setThreads] = useState([]);
+  const fetchThread = async () => {
+    const res = await axios.get("http://localhost:8080/api/allThreads");
+    setThreads(res.data.data);
+    console.log("fetchThreads", res.data.data);
+  };
+  useEffect(() => {
+    fetchThread();
+  }, []);
   const handlePost = async () => {
     try {
       const {
@@ -20,14 +29,19 @@ function NewThreadForm() {
         content,
         userId: user.id,
       });
+      setTopic("");
+      setContent("");
+      await fetchThread();
     } catch (error) {
       console.error("post thread failed 500", error);
     }
   };
   return (
-    <div className="">
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-white text-lg font-semibold mb-2">New Thread</h3>
+    <div>
+      <div className="p-4 rounded-lg">
+        <h3 className="text-white text-lg font-semibold mb-4 justify-center flex">
+          New Thread
+        </h3>
         <Input
           placeholder="Thread Topic..."
           value={topic}
@@ -49,7 +63,7 @@ function NewThreadForm() {
           Post Thread
         </Button>
       </div>
-      <ThreadList />
+      <ThreadList threads={threads} />
     </div>
   );
 }

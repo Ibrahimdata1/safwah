@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthUser from "../pages/AuthUser";
 import Homepage from "../pages/Homepage";
-import NewsFeed from "./components/NewsFeed";
+import NotFound from "../pages/NotFound";
 import supabase from "../utils/supabaseClient.js";
 import { useEffect, useState } from "react";
 function App() {
@@ -26,12 +26,19 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/homepage" element={<Homepage />} />
+        <Route
+          path="/"
+          element={user ? <Homepage /> : <Navigate to="/auth" />}
+        />
+        <Route
+          path="/homepage"
+          element={user ? <Homepage /> : <Navigate to="/auth" />}
+        />
         <Route
           path="/auth"
-          element={!user ? <AuthUser /> : <Navigate to="/newsFeed" />}
+          element={!user ? <AuthUser /> : <Navigate to="/homepage" />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

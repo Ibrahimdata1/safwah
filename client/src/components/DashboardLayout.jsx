@@ -16,7 +16,7 @@ function DashboardLayout({ children }) {
         </nav>
       </aside>
       <main className="col-span-8">{children}</main>
-      <aside className="col-span-2 p-4 hidden md:block text-gray-400 bg-[#121212d8]">
+      <aside className="col-span-2 p-4 hidden md:block text-gray-400 bg-[#121212f7]">
         <NewThreadForm />
       </aside>
     </div>

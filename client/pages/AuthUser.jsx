@@ -54,26 +54,30 @@ function AuthUser() {
             {isLogin ? "SignIn" : "Register"}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                type="name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="surname">Surname</Label>
-              <Input
-                id="surname"
-                type="surname"
-                required
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-              />
-            </div>
+            {!isLogin && (
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    type="name"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="surname">Surname</Label>
+                  <Input
+                    id="surname"
+                    type="surname"
+                    required
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
