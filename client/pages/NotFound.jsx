@@ -8,7 +8,7 @@ function NotFound() {
       <p className="text-xl mb-6">Page Not Found</p>
       <Button
         onClick={() => navigate("/")}
-        className="text-base px-6 py-2 rounded-xl"
+        className="text-base px-6 py-2 rounded-xl cursor-pointer"
       >
         Go back home
       </Button>

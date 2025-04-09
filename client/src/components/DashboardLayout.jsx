@@ -9,10 +9,14 @@ function DashboardLayout({ children }) {
           🧭 Safwah
         </div>
         <nav className="space-y-2">
-          <SidebarItem icon={<Home size={18} />} label="Feed" />
-          <SidebarItem icon={<Table size={18} />} label="Posts" />
-          <SidebarItem icon={<Users size={18} />} label="Users" />
-          <SidebarItem icon={<Settings size={18} />} label="Settings" />
+          <SidebarItem icon={<Home size={18} />} label="Feed" link="/" />
+          <SidebarItem icon={<Table size={18} />} label="Posts" link="/posts" />
+          <SidebarItem icon={<Users size={18} />} label="Users" link="users" />
+          <SidebarItem
+            icon={<Settings size={18} />}
+            label="Settings"
+            link="settings"
+          />
         </nav>
       </aside>
       <main className="col-span-8">{children}</main>
