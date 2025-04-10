@@ -4,13 +4,22 @@ const router = express.Router();
 
 router.get("/allThreads", async (req, res) => {
   try {
-    const allThreads = await prisma.Threads.findMany();
+    const allThreads = await prisma.Threads.findMany({
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
     res.status(200).json({ data: allThreads });
   } catch (error) {
     console.error("failed get allthreads 500", error);
     res.status(500).json({ error });
   }
 });
+router.get("/thread/:threadId", async (req, res) => {});
 router.post("/allThreads", async (req, res) => {
   try {
     const { topic, content, userId } = req.body;

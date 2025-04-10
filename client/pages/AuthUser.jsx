@@ -12,6 +12,7 @@ function AuthUser() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ function AuthUser() {
           userId: user.id,
           name,
           surname,
+          username,
           password,
           email,
         });
@@ -74,6 +76,16 @@ function AuthUser() {
                     required
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="username">username</Label>
+                  <Input
+                    id="username"
+                    type="username"
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
               </div>

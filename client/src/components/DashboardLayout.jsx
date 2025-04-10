@@ -1,29 +1,39 @@
-import { Home, Table, Users, Settings } from "lucide-react";
-import SidebarItem from "./SidebarItem";
-import NewThreadForm from "./NewThreadForm";
-function DashboardLayout({ children }) {
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import axios from "axios";
+import supabase from "../../utils/supabaseClient.js";
+function DashboardLayout() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser();
+        if (error) return console.error("authUser not found!");
+        const res = await axios.get(
+          `http://localhost:8080/api/users/${user.id}`
+        );
+        setUser(res.data.data);
+      } catch (error) {
+        console.error("error fetchUserDashboard 500", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
+  if (loading) {
+    return <Loader2 className="mr-2 h-4 animate-spin" />;
+  }
   return (
-    <div className="grid grid-cols-12 min-h-screen ">
-      <aside className="col-span-2 bg-[#121212f7] p-4 border-r border-border hidden md:block">
-        <div className="text-2xl font-semibold mb-6 flex items-center gap-2 text-gray-300">
-          🧭 Safwah
-        </div>
-        <nav className="space-y-2">
-          <SidebarItem icon={<Home size={18} />} label="Feed" link="/" />
-          <SidebarItem icon={<Table size={18} />} label="Posts" link="/posts" />
-          <SidebarItem icon={<Users size={18} />} label="Users" link="users" />
-          <SidebarItem
-            icon={<Settings size={18} />}
-            label="Settings"
-            link="settings"
-          />
-        </nav>
-      </aside>
-      <main className="col-span-8">{children}</main>
-      <aside className="col-span-2 p-4 hidden md:block text-gray-400 bg-[#121212f7]">
-        <NewThreadForm />
-      </aside>
-    </div>
+    <SidebarProvider className="col-span-2 bg-[#121212f5]">
+      <AppSidebar user={user} />
+    </SidebarProvider>
   );
 }
 export default DashboardLayout;

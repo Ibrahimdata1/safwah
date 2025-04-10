@@ -1,6 +1,15 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
@@ -72,39 +81,52 @@ function PostForm({ onPost }) {
     }
   };
   return (
-    <div className="bg-gray-50 border text-black rounded-xl p-4 mb-10">
-      <h2 className="text-lg font-semibold mb-3">📢 Post Your Own Content</h2>
-      <Input
-        placeholder="Topic"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 placeholder-gray-400"
-      />
-      <div className="flex items-center gap-3 mb-3 mt-3 cursor-pointer">
-        <Input type="file" onChange={handleUpload} />
-        {selectedFile && (
-          <span className="text-gray-700 text-sm truncate max-w-[200px]">
-            📎{selectedFile.name}
-          </span>
-        )}
-      </div>
-      <Textarea
-        placeholder="ContentPost"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        className="w-full px-4 py-2 mb-3 bg-gray-800 text-white rounded-lg border border-gray-600 placeholder-gray-400"
-        row="4"
-      />
-      {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-      <Button
-        onClick={handlePost}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 cursor-pointer rounded-lg transition"
-        disabled={isLoading}
-      >
-        {isLoading && <Loader2 className="mr-2 h-4 animate-spin" />}
-        {isLoading ? "Posting..." : "Post"}
-      </Button>
-    </div>
+    <Card className="w-full bg-background text-foreground border border-border shadow-sm">
+      <CardHeader>
+        <CardTitle className="text-2xl">Post Your Own Content</CardTitle>
+        <CardDescription className="text-md">
+          write something useful.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="topic">Topic</Label>
+              <Input
+                id="topic"
+                placeholder="Set up your topic..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="upload">Upload</Label>
+              <Input id="upload" type="file" onChange={handleUpload} />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Textarea
+                placeholder="Say somethings..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                row="4"
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button
+          onClick={handlePost}
+          disabled={isLoading}
+          className="cursor-pointer"
+        >
+          {isLoading && <Loader2 className="mr-2 h-4 animate-spin" />}
+          {isLoading ? "Posting..." : "Post"}
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
 export default PostForm;

@@ -15,7 +15,7 @@ function NewsFeed() {
     setPosts((prev) => [newPost, ...prev]);
   };
   return (
-    <div className="min-h-screen bg-[#121212e8] text-white py-10 px-4 md:px-12">
+    <div className="min-h-screen bg-[#121212f5] text-white py-10 px-4 md:px-12 col-span-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-4 text-center">📰 Safwah Feed</h1>
         <p className="text-center text-gray-400 mb-8">

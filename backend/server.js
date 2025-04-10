@@ -6,6 +6,7 @@ import authRouter from "./routes/authRouter.js";
 import newsFeedRouter from "./routes/newsFeedRouter.js";
 import muslimNewsRouter from "./routes/muslimNewsRouter.js";
 import threadRouter from "./routes/threadRouter.js";
+import usersRouter from "./routes/usersRouter.js";
 import path from "path";
 import cron from "node-cron";
 import axios from "axios";
@@ -23,6 +24,7 @@ app.use("/auth", authRouter);
 app.use("/api", newsFeedRouter);
 app.use("/api", muslimNewsRouter);
 app.use("/api", threadRouter);
+app.use("/api", usersRouter);
 cron.schedule("0 * * * *", async () => {
   try {
     console.log("⏰ Syncing Muslim news...");

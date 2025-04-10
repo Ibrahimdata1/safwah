@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthUser from "../pages/AuthUser";
 import Homepage from "../pages/Homepage";
+import Webboard from "./components/NewThreadForm";
 import NotFound from "../pages/NotFound";
 import supabase from "../utils/supabaseClient.js";
 import { useEffect, useState } from "react";
@@ -38,6 +39,7 @@ function App() {
           path="/auth"
           element={!user ? <AuthUser /> : <Navigate to="/homepage" />}
         />
+        <Route path="/webboard" element={<Webboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

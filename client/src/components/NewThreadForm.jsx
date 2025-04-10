@@ -1,70 +1,53 @@
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Flame } from "lucide-react";
 import axios from "axios";
-import ThreadList from "./ThreadList";
-import supabase from "../../utils/supabaseClient";
 function NewThreadForm() {
-  const [topic, setTopic] = useState("");
-  const [content, setContent] = useState("");
   const [threads, setThreads] = useState([]);
-  const fetchThread = async () => {
-    const res = await axios.get("http://localhost:8080/api/allThreads");
-    setThreads(res.data.data);
-    console.log("fetchThreads", res.data.data);
-  };
+  const navigate = useNavigate();
   useEffect(() => {
-    fetchThread();
+    const fetchThreads = async () => {
+      const res = await axios.get("http://localhost:8080/api/allThreads");
+      setThreads(res.data.data);
+    };
+    fetchThreads();
   }, []);
-  const handlePost = async () => {
-    try {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      if (error) return console.error("user error!");
-      await axios.post("http://localhost:8080/api/allThreads", {
-        topic,
-        content,
-        userId: user.id,
-      });
-      setTopic("");
-      setContent("");
-      await fetchThread();
-    } catch (error) {
-      console.error("post thread failed 500", error);
-    }
-  };
   return (
-    <div>
-      <div className="p-4 rounded-lg">
-        <h3 className="text-white text-lg font-semibold mb-4 justify-center flex">
-          New Thread
-        </h3>
-        <Input
-          placeholder="Thread Topic..."
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          className="w-full p-2 rounded mb-2 text-white bg-gray-700"
-        />
-        <Textarea
-          placeholder="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="w-full p-2 rounded bg-gray-700 text-white mb-2"
-          rows={3}
-        />
-        <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded cursor-pointer"
-          onClick={handlePost}
-          disabled={!topic || !content}
-        >
-          Post Thread
-        </Button>
-      </div>
-      <ThreadList threads={threads} />
-    </div>
+    <aside className="col-span-2 p-4 hidden md:block text-gray-400 bg-[#121212f7]">
+      <Table className="caption-top">
+        <TableCaption className="mb-3 text-2xl font-extrabold tracking-tight lg:text-3xl bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent drop-shadow-sm">
+          Webboard
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[30px]">
+              <Flame className="text-red-600 size-4" />
+            </TableHead>
+            <TableHead className="w-[100px]">Topic</TableHead>
+            <TableHead>Username</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {threads.map((thread) => (
+            <TableRow key={thread.id}>
+              <TableCell>#1</TableCell>
+              <TableCell className="font-medium">{thread.topic}</TableCell>
+              <TableCell>{thread.user?.username}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </aside>
   );
 }
 export default NewThreadForm;
