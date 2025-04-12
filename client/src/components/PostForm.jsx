@@ -15,13 +15,14 @@ import { Loader2 } from "lucide-react";
 import axios from "axios";
 function PostForm({ onPost }) {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [author, setAuthor] = useState("");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const handlePost = async () => {
-    if (!title || !content) {
-      setError("Title and Content Cannot be empty!");
+    if (!title || !author) {
+      setError("Title and Author Cannot be empty!");
       return;
     }
     setError("");
@@ -30,39 +31,34 @@ function PostForm({ onPost }) {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("image", selectedFile);
-        await axios.post(
-          "http://localhost:8080/api/newsFeed/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        const newPost = {
+        await axios.post("http://localhost:8080/api/books/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const newBook = {
           title,
-          content,
-          image: `http://localhost:8080/uploads/${selectedFile.name}`,
-          type: "users",
+          author,
+          description,
+          coverUrl: `http://localhost:8080/uploads/${selectedFile.name}`,
         };
-        const res = await axios.post(
-          "http://localhost:8080/api/newsFeed",
-          newPost
-        );
-        onPost(res.data.data);
+        await axios.post("http://localhost:8080/api/books", newBook);
+        onPost();
         setTitle("");
-        setContent("");
+        setAuthor("");
+        setDescription("");
         setSelectedFile(null);
       } else {
-        const newPost = {
+        const newBook = {
           title,
-          content,
-          type: "users",
+          author,
+          description,
         };
-        await axios.post("http://localhost:8080/api/newsFeed", newPost);
-        onPost(newPost);
+        await axios.post("http://localhost:8080/api/books", newBook);
+        onPost();
         setTitle("");
-        setContent("");
+        setAuthor("");
+        setDescription("");
         setSelectedFile(null);
       }
     } catch (error) {
@@ -83,33 +79,44 @@ function PostForm({ onPost }) {
   return (
     <Card className="w-2xl mx-auto md:mb-12 bg-background text-foreground border border-border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Post Your Own Content</CardTitle>
+        <CardTitle className="text-2xl">Add New Book for Admin</CardTitle>
         <CardDescription className="text-md">
-          write something useful.
+          add new book to newsFeed.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="topic">Topic</Label>
+              <Label htmlFor="topic">Title</Label>
               <Input
-                id="topic"
-                placeholder="Set up your topic..."
+                id="title"
+                placeholder="book title..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="upload">Upload</Label>
-              <Input id="upload" type="file" onChange={handleUpload} />
+              <Label htmlFor="author">Author</Label>
+              <Input
+                id="author"
+                placeholder="author name..."
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
             </div>
             <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="coverUrl">Upload</Label>
+              <Input id="coverUrl" type="file" onChange={handleUpload} />
+            </div>
+
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="author">Description</Label>
               <Textarea
-                placeholder="Say somethings..."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                row="4"
+                id="description"
+                placeholder="book description..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}

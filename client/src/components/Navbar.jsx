@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/menubar";
 function Navbar() {
   return (
-    <Menubar className="flex justify-center mb-10 ">
+    <Menubar className="flex justify-center mb-4">
       <MenubarMenu className="">
         <MenubarTrigger className="w-25 justify-center">File</MenubarTrigger>
         <MenubarContent>

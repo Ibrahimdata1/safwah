@@ -1,34 +1,28 @@
 import PostCard from "@/components/PostCard";
 import PostForm from "@/components/PostForm";
+import BookCard from "@/components/BookCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 function NewsFeed() {
-  const [posts, setPosts] = useState([]);
+  const [books, setBooks] = useState([]);
+  const getFeed = async () => {
+    const newsFeed = await axios.get("http://localhost:8080/api/books");
+    setBooks(newsFeed.data.data);
+  };
   useEffect(() => {
-    const getFeed = async () => {
-      const newsFeed = await axios.get("http://localhost:8080/api/newsFeed");
-      setPosts(newsFeed.data.data);
-    };
     getFeed();
   }, []);
-  const handleNewPost = (newPost) => {
-    setPosts((prev) => [newPost, ...prev]);
-  };
+  const handleNewBook = () => getFeed();
   return (
     <div className="min-h-screen bg-[#121212f5] text-white col-span-8">
       <div className="max-w-4xl mx-auto">
-        <PostForm onPost={handleNewPost} />
-        <div className="space-y-6">
-          {posts.map((post) => (
-            <PostCard
-              key={post.id}
-              title={post.title}
-              content={post.content}
-              image={post.image}
-              postId={post.id}
-            />
-          ))}
-        </div>
+        <PostForm onPost={handleNewBook} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {books?.map((book) => (
+          <BookCard book={book} key={book.id} />
+        ))}
       </div>
     </div>
   );

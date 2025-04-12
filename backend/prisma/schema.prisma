@@ -63,3 +63,29 @@ model Likes{
   post Post @relation(fields:[postId],references:[id],onDelete:Cascade)
   @@unique([userId,postId])
 }
+model Books{
+  id String @id @default(uuid())
+  title String
+  author String
+  coverUrl String?
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  paragraphs Paragraphs[]
+}
+model Paragraphs{
+  id String @id @default(uuid())
+  bookId String
+  book Books @relation(fields:[bookId],references:[id])
+  arText String
+  engText String?
+  sharh Sharh[]
+}
+model Sharh{
+  id String @id @default(uuid())
+  paragraphId String
+  paragraph Paragraphs @relation(fields:[paragraphId],references:[id])
+  scholar String
+  arExplain String
+  engExplain String
+}
