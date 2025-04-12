@@ -108,7 +108,7 @@ function PostCard({ title, content, image, postId }) {
     setCommentList(res.data.data);
   };
   return (
-    <Card className="hover:shadow-xl transition cursor-pointer bg-[#1f2937] text-white w-full max-w-2xl mx-auto rounded-2xl border border-gray-600 shadow-md mb-6">
+    <Card className="hover:shadow-xl transition cursor-pointer bg-[#1f2937] text-white w-full mx-auto rounded-2xl border border-gray-600 shadow-md mb-6">
       <CardHeader className="flex flex-row items-center justify-between px- pt-5">
         <div className="flex items-center gap-3">
           <img

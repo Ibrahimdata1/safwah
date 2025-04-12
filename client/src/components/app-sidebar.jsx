@@ -10,12 +10,12 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  Home,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -33,135 +33,74 @@ export function AppSidebar({ user }) {
       email: user.email,
       avatar: "/avatars/shadcn.jpg",
     },
-    teams: [
-      {
-        name: "Acme Inc",
-        logo: GalleryVerticalEnd,
-        plan: "Enterprise",
-      },
-      {
-        name: "Acme Corp.",
-        logo: AudioWaveform,
-        plan: "Startup",
-      },
-      {
-        name: "Evil Corp.",
-        logo: Command,
-        plan: "Free",
-      },
-    ],
     navMain: [
       {
-        title: "Playground",
-        url: "#",
-        icon: SquareTerminal,
+        title: "Home",
+        url: "/",
+        icon: Home,
         isActive: true,
-        items: [
-          {
-            title: "History",
-            url: "#",
-          },
-          {
-            title: "Starred",
-            url: "#",
-          },
-          {
-            title: "Settings",
-            url: "#",
-          },
-        ],
       },
       {
-        title: "Models",
-        url: "#",
+        title: "Webboard",
+        url: "/webboard",
         icon: Bot,
-        items: [
-          {
-            title: "Genesis",
-            url: "#",
-          },
-          {
-            title: "Explorer",
-            url: "#",
-          },
-          {
-            title: "Quantum",
-            url: "#",
-          },
-        ],
       },
       {
-        title: "Documentation",
-        url: "#",
+        title: "Marketplace",
+        url: "/market",
         icon: BookOpen,
         items: [
           {
-            title: "Introduction",
-            url: "#",
+            title: "Musharakah",
+            url: "/market/musharakah",
           },
           {
-            title: "Get Started",
-            url: "#",
+            title: "Mudarabah",
+            url: "/market/mudarabah",
           },
           {
-            title: "Tutorials",
-            url: "#",
+            title: "Murabahah",
+            url: "/market/murabahah",
           },
           {
-            title: "Changelog",
-            url: "#",
+            title: "Sadaqah",
+            url: "/market/sadaqah",
           },
         ],
       },
       {
         title: "Settings",
-        url: "#",
+        url: "/settings",
         icon: Settings2,
         items: [
           {
             title: "General",
-            url: "#",
+            url: "/settings",
           },
           {
             title: "Team",
-            url: "#",
+            url: "/settings/team",
           },
           {
-            title: "Billing",
-            url: "#",
+            title: "Profile",
+            url: "/settings/profile",
           },
           {
-            title: "Limits",
-            url: "#",
+            title: "Display",
+            url: "/settings/display",
           },
         ],
-      },
-    ],
-    projects: [
-      {
-        name: "Design Engineering",
-        url: "#",
-        icon: Frame,
-      },
-      {
-        name: "Sales & Marketing",
-        url: "#",
-        icon: PieChart,
-      },
-      {
-        name: "Travel",
-        url: "#",
-        icon: Map,
       },
     ],
   };
 
   return (
-    <Sidebar collapsible="icon" className="relative">
-      <SidebarTrigger className="absolute top-2.5 right-2.5 z-20 text-muted-foreground hover:text-foreground transition cursor-pointer" />
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarTrigger />
+      </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

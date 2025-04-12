@@ -31,7 +31,7 @@ function DashboardLayout() {
     return <Loader2 className="mr-2 h-4 animate-spin" />;
   }
   return (
-    <SidebarProvider className="col-span-2 bg-[#121212f5]">
+    <SidebarProvider className="col-span-2">
       <AppSidebar user={user} />
     </SidebarProvider>
   );

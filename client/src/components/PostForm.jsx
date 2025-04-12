@@ -81,7 +81,7 @@ function PostForm({ onPost }) {
     }
   };
   return (
-    <Card className="w-full bg-background text-foreground border border-border shadow-sm">
+    <Card className="w-2xl mx-auto md:mb-12 bg-background text-foreground border border-border shadow-sm">
       <CardHeader>
         <CardTitle className="text-2xl">Post Your Own Content</CardTitle>
         <CardDescription className="text-md">
