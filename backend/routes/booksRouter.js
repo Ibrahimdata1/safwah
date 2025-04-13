@@ -115,6 +115,45 @@ router.post("/books", async (req, res) => {
     res.status(500).json({ error });
   }
 });
+router.post("/books/:bookId/chapters", async (req, res) => {
+  const { bookId } = req.params;
+  const { name, parentId } = req.body;
+
+  try {
+    const count = await prisma.Chapter.count({
+      where: {
+        bookId,
+        parentId: parentId ?? null,
+      },
+    });
+    const newChapter = await prisma.Chapter.create({
+      data: {
+        name,
+        bookId,
+        parentId: parentId ?? null,
+        order: count + 1,
+      },
+    });
+    res.status(201).json({ data: newChapter });
+  } catch (error) {
+    console.error("Create Chapter Error 500", error);
+    res.status(500).json({ error });
+  }
+});
+router.get("/books/:bookId/chapters", async (req, res) => {
+  const { bookId } = req.params;
+  try {
+    const chapters = await prisma.Chapter.findMany({
+      where: {
+        bookId,
+      },
+    });
+    res.status(200).json({ data: chapters });
+  } catch (error) {
+    console.error("get chapter error 500", error);
+    res.status(500).json({ error });
+  }
+});
 router.post("/books/upload", (req, res) => {
   if (!req.files || !req.files.image) {
     return res.status(400).json({ message: "No File Upload!" });

@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import SelectBooks from "@/components/SelectBooks";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +18,18 @@ function PostChapter() {
   const [bookId, setBookId] = useState(null);
   const [name, setName] = useState("");
   const [parentId, setParentId] = useState(null);
+  const [chapters, setChapters] = useState([]);
+  useEffect(() => {
+    if (bookId) {
+      const getChapters = async () => {
+        await axios
+          .get(`http://localhost:8080/api/books/${bookId}/chapters`)
+          .then((res) => setChapters(res.data.data))
+          .catch((err) => console.error("load Chapters error", err));
+      };
+      getChapters();
+    }
+  }, [bookId]);
   const getSelectedBookId = (bookId) => {
     setBookId(bookId);
   };
@@ -19,7 +40,6 @@ function PostChapter() {
       {
         name,
         parentId,
-        order: 1,
       }
     );
     if (res.status == 201) {
@@ -42,12 +62,34 @@ function PostChapter() {
         </div>
         <form className="space-y-6 mt-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
+            <Label className="font-medium">Parent Chapter (Optional)</Label>
+            <Select
+              value={parentId}
+              onValueChange={(value) => setParentId(value)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a matn" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Parent Chapter</SelectLabel>
+                  <SelectItem value={null}>--None (Root Chapter)--</SelectItem>
+                  {chapters.map((chapter) => (
+                    <SelectItem key={chapter.id} value={chapter.id}>
+                      {chapter.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
             <Label className="font-medium">Chapter Name</Label>
             <Input
               name="name"
               value={name}
-              onChange={(e) => setChapter(e.target.value)}
-              placeholder="type arabic sharh ..."
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Chapter Name"
               required
             />
           </div>
