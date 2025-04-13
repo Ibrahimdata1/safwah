@@ -23,7 +23,7 @@ function BookCard({ book }) {
       </CardContent>
       <CardFooter>
         <Button asChild>
-          <Link to={`/books/${book.id}`}>Read</Link>
+          <Link to={`/booksharh/${book.id}`}>Read</Link>
         </Button>
       </CardFooter>
     </Card>

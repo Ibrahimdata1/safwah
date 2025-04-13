@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
-function PostForm({ onPost }) {
+function PostForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
@@ -43,7 +43,6 @@ function PostForm({ onPost }) {
           coverUrl: `http://localhost:8080/uploads/${selectedFile.name}`,
         };
         await axios.post("http://localhost:8080/api/books", newBook);
-        onPost();
         setTitle("");
         setAuthor("");
         setDescription("");

@@ -63,6 +63,16 @@ model Likes{
   post Post @relation(fields:[postId],references:[id],onDelete:Cascade)
   @@unique([userId,postId])
 }
+model Chapter{
+  id String @id @default(uuid())
+  name String
+  parentId String?
+  parent Chapter? @relation("ChapterTrees",fields:[parentId],references:[id])
+  children Chapter[] @relation("ChapterTrees")
+  bookId String
+  book Books @relation(fields:[bookId],references:[id])
+  order Int
+}
 model Books{
   id String @id @default(uuid())
   title String
@@ -71,20 +81,22 @@ model Books{
   description String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  paragraphs Paragraphs[]
+  matn Matn[]   
+  chapters Chapter[]
 }
-model Paragraphs{
+model Matn{
   id String @id @default(uuid())
   bookId String
-  book Books @relation(fields:[bookId],references:[id])
+  book Books @relation(fields:[bookId],references:[id],onDelete:Cascade)
+  order Int
   arText String
   engText String?
   sharh Sharh[]
 }
 model Sharh{
   id String @id @default(uuid())
-  paragraphId String
-  paragraph Paragraphs @relation(fields:[paragraphId],references:[id])
+  matnId String
+  matn Matn @relation(fields:[matnId],references:[id],onDelete:Cascade)
   scholar String
   arExplain String
   engExplain String
