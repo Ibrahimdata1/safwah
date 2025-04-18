@@ -72,6 +72,7 @@ model Chapter{
   bookId String
   book Books @relation(fields:[bookId],references:[id])
   order Int
+  matns Matn[]
 }
 model Books{
   id String @id @default(uuid())
@@ -92,6 +93,8 @@ model Matn{
   arText String
   engText String?
   sharh Sharh[]
+  chapterId String
+  chapter Chapter @relation(fields:[chapterId],references:[id])
 }
 model Sharh{
   id String @id @default(uuid())

@@ -42,6 +42,7 @@ router.get("/books/:bookId/matn", async (req, res) => {
       },
       include: {
         sharh: true,
+        chapter: true,
       },
       orderBy: {
         order: "asc",
@@ -55,7 +56,7 @@ router.get("/books/:bookId/matn", async (req, res) => {
 });
 router.post("/books/:bookId/matn", async (req, res) => {
   const { bookId } = req.params;
-  const { arText, engText } = req.body;
+  const { arText, engText, chapterId } = req.body;
   if (!bookId || !arText) {
     console.error("missing bookId or arText from post matn");
     return res.status(400).json({ error: "bookId and arText are required." });
@@ -72,6 +73,7 @@ router.post("/books/:bookId/matn", async (req, res) => {
         arText,
         engText,
         order: count + 1,
+        chapterId,
       },
     });
     res.status(201).json({ data: newmatn });
@@ -151,6 +153,35 @@ router.get("/books/:bookId/chapters", async (req, res) => {
     res.status(200).json({ data: chapters });
   } catch (error) {
     console.error("get chapter error 500", error);
+    res.status(500).json({ error });
+  }
+});
+router.get("/books/:bookId/chapters/tree", async (req, res) => {
+  const { bookId } = req.params;
+  try {
+    const chapters = await prisma.chapter.findMany({
+      where: {
+        bookId,
+      },
+      orderBy: {
+        order: "asc",
+      },
+    });
+    const map = {};
+    const roots = [];
+    chapters.forEach((chapter) => {
+      map[chapter.id] = { ...chapter, children: [] };
+    });
+    chapters.forEach((chapter) => {
+      if (chapter.parentId) {
+        map[chapter.parentId].children.push(map[chapter.id]);
+      } else {
+        roots.push(map[chapter.id]);
+      }
+    });
+    res.status(200).json({ data: roots });
+  } catch (error) {
+    console.error("fetch chapter tree error 500", error);
     res.status(500).json({ error });
   }
 });

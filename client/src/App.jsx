@@ -1,5 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthUser from "../pages/AuthUser";
+import PostForm from "@/components/PostForm";
+import PostMatn from "@/components/PostMatn";
+import PostSharh from "@/components/PostSharh";
+import PostChapter from "@/components/PostChapter";
 import Homepage from "../pages/Homepage";
 import Webboard from "./components/NewThreadForm";
 import BookSharhPage from "../pages/BookSharhPage";
@@ -43,7 +47,12 @@ function App() {
         />
         <Route path="/webboard" element={<Webboard />} />
         <Route path="/booksharh/:bookId" element={<BookSharhPage />} />
-        <Route path="/admin/books" element={<AdminPage />} />
+        <Route path="/admin/books" element={<AdminPage />}>
+          <Route index element={<PostForm />} />
+          <Route path="postmatn" element={<PostMatn />} />
+          <Route path="postsharh" element={<PostSharh />} />
+          <Route path="postchapter" element={<PostChapter />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

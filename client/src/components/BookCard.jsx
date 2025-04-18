@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 function BookCard({ book }) {
   return (
-    <Card className="w-full max-w-sm shadow-lg">
+    <Card className="w-full max-w-sm shadow-lg flex flex-column">
       <CardHeader>
         <img
           src={book.coverUrl}
@@ -16,13 +16,13 @@ function BookCard({ book }) {
           className="w-full h-60 object-cover rounded-md"
         />
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <h3 className="text-lg font-semibold">{book.title}</h3>
         <p className="text-sm text-muted-foreground">{book.author}</p>
         <p className="mt-2 text-sm line-clamp-3">{book.description}</p>
       </CardContent>
       <CardFooter>
-        <Button asChild>
+        <Button asChild className="w-full">
           <Link to={`/booksharh/${book.id}`}>Read</Link>
         </Button>
       </CardFooter>

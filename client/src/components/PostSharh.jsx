@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SelectMatn from "@/components/SelectMatn";
 function PostSharh() {
+  const navigate = useNavigate();
   const [matnId, setMatnId] = useState(null);
   const [text, setText] = useState("");
   const [arExplain, setarExplain] = useState("");
@@ -32,12 +34,13 @@ function PostSharh() {
       setarExplain("");
       setengExplain("");
       setScholar("");
+      navigate(0);
     } else {
       alert("Error Add Sharh && Status axios not 201!");
     }
   };
   return (
-    <Card className="max-w-2xl mx-auto mt-10 shadow-xl">
+    <Card className="w-2xl mx-auto md:mb-12 bg-background text-foreground border border-border shadow-sm">
       <CardHeader>
         <CardTitle className="text-xl">Add new Sharh</CardTitle>
       </CardHeader>

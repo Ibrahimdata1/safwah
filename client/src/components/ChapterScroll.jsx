@@ -1,40 +1,46 @@
 import { TreeView } from "@/components/tree-view";
-const data = [
-  {
-    id: "1",
-    name: "หมวดที่ 1",
-    children: [
-      {
-        id: "1-1",
-        name: "บทที่ 1.1",
-        children: [
-          { id: "1-1-1", name: "หัวข้อย่อย 1.1.1" },
-          { id: "1-1-2", name: "หัวข้อย่อย 1.1.2" },
-        ],
-      },
-      {
-        id: "1-2",
-        name: "บทที่ 1.2",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "หมวดที่ 2",
-    draggable: true,
-    droppable: true,
-  },
-];
-function ChapterScroll() {
+import axios from "axios";
+import { useEffect, useState } from "react";
+function ChapterScroll({ bookId, setSelectedChapter, setChapters }) {
   const handleSelect = (item) => {
-    console.log("choose chapter", item);
+    if (!item.id) {
+      console.error("no item id from chapterScroll!");
+      return;
+    } else {
+      setSelectedChapter(item.id);
+    }
   };
+  const [treeData, setTreeData] = useState([]);
+  const [selected, setSelected] = useState(null);
+  useEffect(() => {
+    const fetchChapters = async () => {
+      const res = await axios.get(
+        `http://localhost:8080/api/books/${bookId}/chapters`
+      );
+      const data = res.data.data;
+      setChapters(data);
+    };
+    fetchChapters();
+  }, [bookId]);
+  useEffect(() => {
+    const fetchChaptersTree = async () => {
+      const res = await axios.get(
+        `http://localhost:8080/api/books/${bookId}/chapters/tree`
+      );
+      const data = res.data.data;
+      setTreeData(data);
+      if (data.length > 0) {
+        setSelected(data[0].id);
+      }
+    };
+    if (bookId) fetchChaptersTree();
+  }, [bookId]);
   return (
-    <div className="w-[300px] h-screen bg-black text-white p-4 overflow-y-auto">
+    <div className="w-full h-screen bg-black text-white p-4 overflow-y-auto overflow-x-auto">
       <h2 className="text-xl font-bold mb-4">Table of Contents</h2>
       <TreeView
-        data={data}
-        initialSelectedItemId="1-1-2"
+        data={treeData}
+        initialSelectedItemId={selected}
         onSelectChange={handleSelect}
       />
     </div>

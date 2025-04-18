@@ -11,10 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 import SelectBooks from "@/components/SelectBooks";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 function PostChapter() {
+  const navigate = useNavigate();
   const [bookId, setBookId] = useState(null);
   const [name, setName] = useState("");
   const [parentId, setParentId] = useState(null);
@@ -46,12 +48,13 @@ function PostChapter() {
       alert("Create Chapter Successful!");
       setName("");
       setParentId(null);
+      navigate(0);
     } else {
       alert("Create Chapter Faild 500!");
     }
   };
   return (
-    <Card className="max-w-2xl mx-auto mt-10 shadow-xl">
+    <Card className="w-2xl mx-auto md:mb-12 bg-background text-foreground border border-border shadow-sm">
       <CardHeader>
         <CardTitle className="text-xl">Add new Chapter</CardTitle>
       </CardHeader>

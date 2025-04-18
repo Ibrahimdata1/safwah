@@ -12,8 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 function PostForm() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
@@ -54,11 +56,11 @@ function PostForm() {
           description,
         };
         await axios.post("http://localhost:8080/api/books", newBook);
-        onPost();
         setTitle("");
         setAuthor("");
         setDescription("");
         setSelectedFile(null);
+        navigate(0);
       }
     } catch (error) {
       console.error("error newsFeed 500", error);

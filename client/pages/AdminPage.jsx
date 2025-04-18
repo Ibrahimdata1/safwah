@@ -1,14 +1,18 @@
-import PostForm from "@/components/PostForm";
-import PostMath from "@/components/PostMatn";
-import PostSharh from "@/components/PostSharh";
-import PostChapter from "@/components/PostChapter";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar-admin";
+import { Outlet } from "react-router-dom";
+
 function AdminPage() {
   return (
-    <div className="bg-[#121212f5] mx-auto min-h-screen">
-      <PostForm />
-      <PostMath />
-      <PostSharh />
-      <PostChapter />
+    <div className="grid grid-cols-12 bg-[#121212f5]">
+      <div>
+        <SidebarProvider>
+          <AppSidebar />
+        </SidebarProvider>
+      </div>
+      <div className="col-span-10 mt-10">
+        <Outlet />
+      </div>
     </div>
   );
 }
