@@ -84,7 +84,7 @@ router.post("/books/:bookId/matn", async (req, res) => {
 });
 router.post("/books/:matnId/sharh", async (req, res) => {
   const { matnId } = req.params;
-  const { arExplain, engExplain, scholar } = req.body;
+  const { arExplain, engExplain, scholar, footnoteAr, footnoteEng } = req.body;
   try {
     const newSharh = await prisma.sharh.create({
       data: {
@@ -92,6 +92,8 @@ router.post("/books/:matnId/sharh", async (req, res) => {
         arExplain,
         engExplain,
         scholar,
+        footnoteAr,
+        footnoteEng,
       },
     });
     res.status(201).json({ data: newSharh });
@@ -199,4 +201,5 @@ router.post("/books/upload", (req, res) => {
     res.status(200).json({ message: "upload pic success!" });
   });
 });
+
 export default router;

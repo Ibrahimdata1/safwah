@@ -103,4 +103,12 @@ model Sharh{
   scholar String
   arExplain String
   engExplain String
+  footnotes Footnote[]
+}
+model Footnote{
+  id String @id @default(uuid())
+  sharhId String
+  sharh Sharh @relation(fields:[sharhId],references:[id],onDelete:Cascade)
+  ar String?
+  eng String?
 }

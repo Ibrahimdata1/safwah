@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-function BookCard({ book }) {
+function BookCard({ book, url }) {
   return (
     <Card className="w-full max-w-sm shadow-lg flex flex-column">
       <CardHeader>
@@ -23,7 +23,7 @@ function BookCard({ book }) {
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={`/booksharh/${book.id}`}>Read</Link>
+          <Link to={`${url}/${book.id}`}>Read</Link>
         </Button>
       </CardFooter>
     </Card>

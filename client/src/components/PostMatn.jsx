@@ -2,13 +2,11 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SelectBooks from "@/components/SelectBooks";
 import SelectChapter from "@/components/SelectChapter";
 function PostMatn() {
-  const navigate = useNavigate();
   const [arText, setarText] = useState("");
   const [engText, setengText] = useState("");
   const [bookId, setBookId] = useState(null);
@@ -27,7 +25,6 @@ function PostMatn() {
       alert("Add Matn Successful!");
       setarText("");
       setengText("");
-      navigate(0);
     } else {
       alert("Error Add Matn && Status axios not 201!");
     }

@@ -2,17 +2,17 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SelectMatn from "@/components/SelectMatn";
 function PostSharh() {
-  const navigate = useNavigate();
   const [matnId, setMatnId] = useState(null);
   const [text, setText] = useState("");
   const [arExplain, setarExplain] = useState("");
   const [engExplain, setengExplain] = useState("");
   const [scholar, setScholar] = useState("");
+  const [footnoteAr, setFootnoteAr] = useState("");
+  const [footnoteEng, setFootnoteEng] = useState("");
   const getSelectMatnId = (matnId) => {
     setMatnId(matnId);
   };
@@ -27,14 +27,14 @@ function PostSharh() {
         arExplain,
         engExplain,
         scholar,
+        footnoteAr,
+        footnoteEng,
       }
     );
     if (res.status == 201) {
       alert(`Add new Sharh for matn:${text}`);
       setarExplain("");
       setengExplain("");
-      setScholar("");
-      navigate(0);
     } else {
       alert("Error Add Sharh && Status axios not 201!");
     }
@@ -71,6 +71,22 @@ function PostSharh() {
               onChange={(e) => setengExplain(e.target.value)}
               placeholder="type english sharh..."
               required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="font-medium">Footnote ar (optional)</Label>
+            <Input
+              name="footnote"
+              value={footnoteAr}
+              onChange={(e) => setFootnoteAr(e.target.value)}
+              placeholder="type Footnote Arabic..."
+            />
+            <Label className="font-medium">Footnote eng (optional)</Label>
+            <Input
+              name="footnote"
+              value={footnoteEng}
+              onChange={(e) => setFootnoteEng(e.target.value)}
+              placeholder="type Footnote Eng..."
             />
           </div>
           <div className="space-y-2">

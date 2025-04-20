@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BookOpen, Bot, Settings2, Home } from "lucide-react";
+import { BookOpen, Bot, Settings2, Home, Cog } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -35,6 +35,11 @@ export function AppSidebar() {
         title: "Add New Sharh",
         url: "/admin/books/postsharh",
         icon: BookOpen,
+      },
+      {
+        title: "Edit Books",
+        url: "/admin/books/adminedit",
+        icon: Cog,
       },
     ],
   };

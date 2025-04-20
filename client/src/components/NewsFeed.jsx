@@ -1,7 +1,7 @@
 import BookCard from "@/components/BookCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
-function NewsFeed() {
+function NewsFeed({ url }) {
   const [books, setBooks] = useState([]);
   useEffect(() => {
     const getFeed = async () => {
@@ -14,7 +14,7 @@ function NewsFeed() {
     <div className="min-h-screen bg-[#121212f5] text-white col-span-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {books?.map((book) => (
-          <BookCard book={book} key={book.id} />
+          <BookCard book={book} key={book.id} url={url} />
         ))}
       </div>
     </div>

@@ -7,6 +7,11 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import ChapterScroll from "@/components/ChapterScroll";
@@ -155,6 +160,19 @@ function BookSharhPage() {
                       style={{ fontSize: `${fontSize}px` }}
                     >
                       {sh.arExplain}
+                      {sh.footnote?.map((fn) => (
+                        <Popover key={fn.id}>
+                          <PopoverTrigger asChild>
+                            <sup className="cursor-pointer text-blue-400 ml-1">
+                              [{fn.id}]
+                            </sup>
+                          </PopoverTrigger>
+                          <PopoverContent className="text-sm max-w-md text-right">
+                            <p className="font-vazir mb-1">{fn.ar}</p>
+                            <p className="font-roboto text-left">{fn.eng}</p>
+                          </PopoverContent>
+                        </Popover>
+                      ))}
                     </p>
                     <p
                       className="font-roboto"

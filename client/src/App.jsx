@@ -7,6 +7,8 @@ import PostChapter from "@/components/PostChapter";
 import Homepage from "../pages/Homepage";
 import Webboard from "./components/NewThreadForm";
 import BookSharhPage from "../pages/BookSharhPage";
+import BookSharhAdmin from "../pages/BookSharhAdmin";
+import AdminEditBook from "../pages/AdminEditBook";
 import AdminPage from "../pages/AdminPage";
 import NotFound from "../pages/NotFound";
 import supabase from "../utils/supabaseClient.js";
@@ -52,6 +54,8 @@ function App() {
           <Route path="postmatn" element={<PostMatn />} />
           <Route path="postsharh" element={<PostSharh />} />
           <Route path="postchapter" element={<PostChapter />} />
+          <Route path="editbooks/:bookId" element={<BookSharhAdmin />} />
+          <Route path="adminedit" element={<AdminEditBook />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

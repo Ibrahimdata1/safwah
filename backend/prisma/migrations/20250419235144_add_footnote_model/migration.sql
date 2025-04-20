@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Footnote" ALTER COLUMN "ar" DROP NOT NULL,
+ALTER COLUMN "eng" DROP NOT NULL;

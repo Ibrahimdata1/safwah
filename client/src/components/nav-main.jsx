@@ -1,5 +1,4 @@
 import { ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import {
   Collapsible,
   CollapsibleContent,
@@ -51,9 +50,9 @@ export function NavMain({ items }) {
                           className="cursor-pointer"
                         >
                           <SidebarMenuSubButton asChild>
-                            <Link to={subItem.url}>
+                            <a href={subItem.url}>
                               <span>{subItem.title}</span>
-                            </Link>
+                            </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -63,13 +62,13 @@ export function NavMain({ items }) {
               </Collapsible>
             ) : (
               <SidebarMenuButton asChild tooltip={item.title} className="">
-                <Link
-                  to={item.url}
+                <a
+                  href={item.url}
                   className="flex items-center mt-3 gap-2 w-full"
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
-                </Link>
+                </a>
               </SidebarMenuButton>
             )}
           </SidebarMenuItem>

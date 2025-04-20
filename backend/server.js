@@ -8,9 +8,8 @@ import muslimNewsRouter from "./routes/muslimNewsRouter.js";
 import threadRouter from "./routes/threadRouter.js";
 import usersRouter from "./routes/usersRouter.js";
 import booksRouter from "./routes/booksRouter.js";
+import editBooksRouter from "./routes/editBooksRouter.js";
 import path from "path";
-import cron from "node-cron";
-import axios from "axios";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,14 +26,8 @@ app.use("/api", muslimNewsRouter);
 app.use("/api", threadRouter);
 app.use("/api", usersRouter);
 app.use("/api", booksRouter);
-cron.schedule("0 * * * *", async () => {
-  try {
-    console.log("⏰ Syncing Muslim news...");
-    await axios.get("http://localhost:8080/api/muslimNews");
-  } catch (error) {
-    console.error("❌ Error syncing news:", error);
-  }
-});
+app.use("/api", editBooksRouter);
+
 app.listen(process.env.PORT, () => {
   console.log(`server running in PORT: ${process.env.PORT}`);
 });
