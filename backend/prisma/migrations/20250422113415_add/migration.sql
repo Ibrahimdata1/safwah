@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Sharh" ADD COLUMN     "mixedText" TEXT NOT NULL DEFAULT '',
+ALTER COLUMN "arExplain" DROP NOT NULL,
+ALTER COLUMN "engExplain" DROP NOT NULL;

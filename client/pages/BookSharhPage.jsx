@@ -12,7 +12,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import ChapterScroll from "@/components/ChapterScroll";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -45,12 +44,30 @@ function BookSharhPage() {
     let i = 0;
     while (i < filterMatn.length) {
       const current = filterMatn[i];
-      if (current.sharh.length === 0) {
-        group.push(filterMatn.slice(i, i + 3));
-        i += 3;
+      if (current.sharh.length > 0) {
+        let groupPage = [current];
+        let j = i + 1;
+        while (
+          j < filterMatn.length &&
+          filterMatn[j].sharh.length === 0 &&
+          groupPage.length < 3
+        ) {
+          groupPage.push(filterMatn[j]);
+          j++;
+        }
+        group.push(groupPage);
+        i = j;
       } else {
-        group.push([current]);
-        i += 1;
+        let groupPage = [];
+        while (
+          i < filterMatn.length &&
+          groupPage.length < 3 &&
+          filterMatn[i].sharh.length === 0
+        ) {
+          groupPage.push(filterMatn[i]);
+          i++;
+        }
+        group.push(groupPage);
       }
     }
     setGroupMatn(group);
@@ -149,54 +166,94 @@ function BookSharhPage() {
                   className=" font-bold text-white font-vazir mb-2 leading-relaxed "
                   style={{ fontSize: `${fontSize}px` }}
                 >
-                  {mt.arText}
+                  {mt.matnText
+                    .split(/\n\n/) // แยกเป็นกลุ่ม ๆ (คู่ละ 2 บรรทัด)
+                    .map((pair, index) => {
+                      const lines = pair.split("\n");
+                      return (
+                        <div key={index} className="mb-6">
+                          {lines.map((line, i) => {
+                            const isArabic = /[\u0600-\u06FF]/.test(line);
+                            return (
+                              <p
+                                key={i}
+                                className={`leading-relaxed ${
+                                  isArabic
+                                    ? "font-vazir text-right"
+                                    : "font-roboto text-left"
+                                }`}
+                                style={{ fontSize: `${fontSize}px` }}
+                              >
+                                {line}
+                              </p>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
                 </CardTitle>
-                <p
-                  className=" font-roboto font-semibold text-white mb-2"
-                  style={{ fontSize: `${fontSize}px` }}
-                >
-                  {mt.engText}
-                </p>
-                <Separator className="border-zinc-700 my-4" />
-                {mt.sharh.length > 0 && mt.sharh[0]?.scholar && (
-                  <p
-                    className=" font-roboto mb-4 text-gray-400"
-                    style={{ fontSize: `${fontSize - 2}px` }}
-                  >
-                    Sharh by: {mt.sharh[0].scholar}
-                  </p>
-                )}
-                {mt.sharh.map((sh) => (
-                  <div key={sh.id} className="mb-6">
-                    <p
-                      className="font-vazir text-right mb-4 font-medium"
-                      style={{ fontSize: `${fontSize}px` }}
-                    >
-                      {sh.arExplain}
-                      {sh.footnote?.map((fn) => (
-                        <Popover key={fn.id}>
-                          <PopoverTrigger asChild>
-                            <sup className="cursor-pointer text-blue-400 ml-1">
-                              [{fn.id}]
-                            </sup>
-                          </PopoverTrigger>
-                          <PopoverContent className="text-sm max-w-md text-right">
-                            <p className="font-vazir mb-1">{fn.ar}</p>
-                            <p className="font-roboto text-left">{fn.eng}</p>
-                          </PopoverContent>
-                        </Popover>
-                      ))}
-                    </p>
-                    <p
-                      className="font-roboto text-lg"
-                      style={{ fontSize: `${fontSize}px` }}
-                    >
-                      {sh.engExplain}
-                    </p>
-                  </div>
-                ))}
               </div>
             ))}
+            {paginationMatn.map((mt) => {
+              return (
+                <div key={mt.id} className="mb-12">
+                  {/* ถ้ามี Sharh ค่อยแสดง separator และคำอธิบาย */}
+                  {mt.sharh.length > 0 && (
+                    <>
+                      <Separator className="border-zinc-700 my-4" />
+                      {mt.sharh[0]?.scholar && (
+                        <p
+                          className=" font-roboto mb-4 text-gray-400"
+                          style={{ fontSize: `${fontSize - 2}px` }}
+                        >
+                          Sharh by: {mt.sharh[0].scholar}
+                        </p>
+                      )}
+
+                      {mt.sharh.map((sh) => (
+                        <div key={sh.id} className="mb-6">
+                          {sh.sharhText
+                            .split(/\r?\n/)
+                            .filter((line) => line.trim() !== "")
+                            .map((line, index) => {
+                              const isArabic = /[\u0600-\u06FF]/.test(line);
+                              return (
+                                <p
+                                  key={index}
+                                  className={`mb-2 leading-relaxed ${
+                                    isArabic
+                                      ? "font-vazir text-right"
+                                      : "font-roboto text-left"
+                                  }`}
+                                  style={{ fontSize: `${fontSize}px` }}
+                                >
+                                  {line}
+                                </p>
+                              );
+                            })}
+
+                          {/* แสดง footnote แยกต่างหาก */}
+                          {sh.footnote?.map((fn) => (
+                            <Popover key={fn.id}>
+                              <PopoverTrigger asChild>
+                                <sup className="cursor-pointer text-blue-400 ml-1">
+                                  [{fn.id}]
+                                </sup>
+                              </PopoverTrigger>
+                              <PopoverContent className="text-sm max-w-md text-right">
+                                <p className="font-vazir mb-1">
+                                  {fn.footnoteText}
+                                </p>
+                              </PopoverContent>
+                            </Popover>
+                          ))}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              );
+            })}
           </CardContent>
           <CardFooter></CardFooter>
         </Card>

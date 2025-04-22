@@ -3,15 +3,14 @@ import prisma from "../utils/prismaClient.js";
 const router = express.Router();
 router.put("/edit/:matnId", async (req, res) => {
   const { matnId } = req.params;
-  const { arText, engText } = req.body;
+  const { matnText } = req.body;
   try {
     const matnUpdated = await prisma.matn.update({
       where: {
         id: matnId,
       },
       data: {
-        arText,
-        engText,
+        matnText,
       },
     });
     res.status(200).json({ data: matnUpdated });
@@ -22,15 +21,14 @@ router.put("/edit/:matnId", async (req, res) => {
 });
 router.put("/edit/:sharhId", async (req, res) => {
   const { sharhId } = req.params;
-  const { arExplain, engExplain, scholar } = req.body;
+  const { sharhText, scholar } = req.body;
   try {
     const sharhUpdated = await prisma.sharh.update({
       where: {
         id: sharhId,
       },
       data: {
-        arExplain,
-        engExplain,
+        sharhText,
         scholar,
       },
     });
@@ -42,15 +40,14 @@ router.put("/edit/:sharhId", async (req, res) => {
 });
 router.put("/edit/:footnoteId", async (req, res) => {
   const { footnoteId } = req.params;
-  const { ar, eng } = req.body;
+  const { footnoteText } = req.body;
   try {
     const footnoteUpdated = await prisma.footnote.update({
       where: {
         id: footnoteId,
       },
       data: {
-        ar,
-        eng,
+        footnoteText,
       },
     });
     res.status(200).json({ data: footnoteUpdated });

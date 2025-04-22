@@ -90,8 +90,7 @@ model Matn{
   bookId String
   book Books @relation(fields:[bookId],references:[id],onDelete:Cascade)
   order Int
-  arText String
-  engText String?
+  matnText String
   sharh Sharh[]
   chapterId String
   chapter Chapter @relation(fields:[chapterId],references:[id])
@@ -101,14 +100,12 @@ model Sharh{
   matnId String
   matn Matn @relation(fields:[matnId],references:[id],onDelete:Cascade)
   scholar String
-  arExplain String
-  engExplain String
+  sharhText String
   footnotes Footnote[]
 }
 model Footnote{
   id String @id @default(uuid())
   sharhId String
   sharh Sharh @relation(fields:[sharhId],references:[id],onDelete:Cascade)
-  ar String?
-  eng String?
+  footnoteText String?
 }

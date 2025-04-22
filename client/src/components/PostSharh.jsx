@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -8,33 +9,30 @@ import SelectMatn from "@/components/SelectMatn";
 function PostSharh() {
   const [matnId, setMatnId] = useState(null);
   const [text, setText] = useState("");
-  const [arExplain, setarExplain] = useState("");
-  const [engExplain, setengExplain] = useState("");
+  const [sharhText, setSharhText] = useState("");
   const [scholar, setScholar] = useState("");
-  const [footnoteAr, setFootnoteAr] = useState("");
-  const [footnoteEng, setFootnoteEng] = useState("");
+  const [footnoteText, setFootnoteText] = useState("");
   const getSelectMatnId = (matnId) => {
     setMatnId(matnId);
   };
   const getSelectMatnText = (matnText) => {
     setText(matnText);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await axios.post(
       `http://localhost:8080/api/books/${matnId}/sharh`,
       {
-        arExplain,
-        engExplain,
+        sharhText,
         scholar,
-        footnoteAr,
-        footnoteEng,
+        footnoteText,
       }
     );
     if (res.status == 201) {
       alert(`Add new Sharh for matn:${text}`);
-      setarExplain("");
-      setengExplain("");
+      setSharhText("");
+      setFootnoteText("");
     } else {
       alert("Error Add Sharh && Status axios not 201!");
     }
@@ -54,39 +52,23 @@ function PostSharh() {
         </div>
         <form className="space-y-6 mt-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label className="font-medium">Sharh Arabic</Label>
-            <Input
-              name="arExplain"
-              value={arExplain}
-              onChange={(e) => setarExplain(e.target.value)}
+            <Label className="font-medium">Text Sharh</Label>
+            <Textarea
+              name="sharhText"
+              value={sharhText}
+              onChange={(e) => setSharhText(e.target.value)}
               placeholder="type arabic sharh ..."
               required
             />
           </div>
+
           <div className="space-y-2">
-            <Label className="font-medium">Sharh English</Label>
-            <Input
-              name="engExplain"
-              value={engExplain}
-              onChange={(e) => setengExplain(e.target.value)}
-              placeholder="type english sharh..."
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="font-medium">Footnote ar (optional)</Label>
-            <Input
+            <Label className="font-medium">Footnote (optional)</Label>
+            <Textarea
               name="footnote"
-              value={footnoteAr}
-              onChange={(e) => setFootnoteAr(e.target.value)}
+              value={footnoteText}
+              onChange={(e) => setFootnoteText(e.target.value)}
               placeholder="type Footnote Arabic..."
-            />
-            <Label className="font-medium">Footnote eng (optional)</Label>
-            <Input
-              name="footnote"
-              value={footnoteEng}
-              onChange={(e) => setFootnoteEng(e.target.value)}
-              placeholder="type Footnote Eng..."
             />
           </div>
           <div className="space-y-2">

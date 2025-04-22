@@ -21,17 +21,16 @@ function BookSharhAdmin() {
       );
       const data = res.data.data.map((m) => ({
         ...m,
-        _original: { arText: m.arText, engText: m.engText },
+        _original: { matnText: m.matnText },
         sharh: m.sharh.map((s) => ({
           ...s,
           _original: {
-            arExplain: s.arExplain,
-            engExplain: s.engExplain,
+            sharhText: s.sharhText,
             scholar: s.scholar,
           },
           footnotes: s.footnotes.map((f) => ({
             ...f,
-            _original: { ar: f.ar, eng: f.eng },
+            _original: { footnoteText: f.footnoteText },
           })),
         })),
       }));
@@ -116,34 +115,27 @@ function BookSharhAdmin() {
   };
   const handleSave = async () => {
     for (const m of matn) {
-      if (
-        m._original?.arText !== m.arText ||
-        m._original?.engText !== m.engText
-      ) {
+      if (m._original?.matnText !== m.matnText) {
         await axios.put(`http://localhost:8080/api/edit/matn/${m.id}`, {
-          arText: m.arText,
-          engText: m.engText,
+          matnText: m.matnText,
         });
       }
       for (const s of m.sharh) {
         if (
-          s._original?.arExplain !== s.arExplain ||
-          s._original?.engExplain !== s.engExplain ||
+          s._original?.sharhText !== s.sharhText ||
           s._original?.scholar !== s.scholar
         ) {
           await axios.put(`http://localhost:8080/api/edit/sharh/${s.id}`, {
-            arExplain: s.arExplain,
-            engExplain: s.engExplain,
+            sharhText: s.sharhText,
             scholar: s.scholar,
           });
         }
         for (const f of s.footnotes) {
-          if (f._original?.ar !== f.ar || f._original?.eng !== f.eng) {
+          if (f._original?.footnoteText !== f.footnoteText) {
             await axios.put(
               `http://localhost:8080/api/edit/footnotes/${f.id}`,
               {
-                ar: f.ar,
-                eng: f.eng,
+                footnoteText: f.footnoteText,
               }
             );
           }
@@ -211,20 +203,13 @@ function BookSharhAdmin() {
               />
               <Textarea
                 className="w-full p-2 border rounded mb-2"
-                value={s.arExplain}
+                value={s.sharhText}
                 onChange={(e) =>
-                  handleChangeSharh(m.id, s.id, "arExplain", e.target.value)
+                  handleChangeSharh(m.id, s.id, "sharhText", e.target.value)
                 }
-                placeholder="Arabic Sharh"
+                placeholder="Sharh Text..."
               />
-              <Textarea
-                className="w-full p-2 border rounded mb-2"
-                value={s.engExplain}
-                onChange={(e) =>
-                  handleChangeSharh(m.id, s.id, "engExplain", e.target.value)
-                }
-                placeholder="English Sharh"
-              />
+
               {s.footnotes.map((f) => (
                 <div className="ml-4 mt-2" key={f.id}>
                   <div className="flex justify-between items-center mb-1">
@@ -242,31 +227,17 @@ function BookSharhAdmin() {
                   </div>
                   <Textarea
                     className="w-full p-2 border rounded mb-1"
-                    value={f.ar}
+                    value={f.footnoteText}
                     onChange={(e) =>
                       handleChangeFootnote(
                         m.id,
                         s.id,
                         f.id,
-                        "ar",
+                        "footnoteText",
                         e.target.value
                       )
                     }
-                    placeholder="Arabic Footnote"
-                  />
-                  <Textarea
-                    className="w-full p-2 border rounded"
-                    value={f.eng}
-                    onChange={(e) =>
-                      handleChangeFootnote(
-                        m.id,
-                        s.id,
-                        f.id,
-                        "eng",
-                        e.target.value
-                      )
-                    }
-                    placeholder="English Footnote"
+                    placeholder="Footnote Text..."
                   />
                 </div>
               ))}
