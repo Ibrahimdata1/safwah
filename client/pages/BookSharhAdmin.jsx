@@ -9,6 +9,11 @@ function BookSharhAdmin() {
   const { bookId } = useParams();
   const [matn, setMatn] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedMatn = matn.slice(startIndex, endIndex);
   useEffect(() => {
     const fetchMatn = async () => {
       const res = await axios.get(
@@ -158,12 +163,13 @@ function BookSharhAdmin() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Edit Content</h1>
-      {matn.map((m) => (
+      {paginatedMatn.map((m) => (
         <div key={m.id} className="bg-[#121212f5] rounded shadow p-4 mb-6">
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-bold text-lg mb-2">Matn</h2>
             <Button
               variant="destructive"
+              className="cursor-pointer"
               size="sm"
               onClick={() => handleDeleteMatn(m.id)}
             >
@@ -190,6 +196,7 @@ function BookSharhAdmin() {
                   variant="destructive"
                   size="sm"
                   onClick={() => handleDeleteSharh(m.id, s.id)}
+                  className="cursor-pointer"
                 >
                   <Trash2 className="w-4 mr-1 h-4" /> Delete Sharh
                 </Button>
@@ -228,6 +235,7 @@ function BookSharhAdmin() {
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDeleteFootnote(m.id, s.id, f.id)}
+                      className="cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4 mr-1" /> Delete Footnote
                     </Button>
@@ -266,6 +274,31 @@ function BookSharhAdmin() {
           ))}
         </div>
       ))}
+      <div className="flex justify-center gap-2 my-6">
+        <Button
+          className="cursor-pointer"
+          size="sm"
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          ← Prev
+        </Button>
+        <span className="px-2 text-sm text-white">
+          Page {currentPage} of {Math.ceil(matn.length / itemsPerPage)}
+        </span>
+        <Button
+          className="cursor-pointer"
+          size="sm"
+          onClick={() =>
+            setCurrentPage((p) =>
+              Math.min(p + 1, Math.ceil(matn.length / itemsPerPage))
+            )
+          }
+          disabled={endIndex >= matn.length}
+        >
+          Next →
+        </Button>
+      </div>
       <Button
         onClick={handleSave}
         className="px-6 py-2 bg-green-600 text-white rounded shadow cursor-pointer"

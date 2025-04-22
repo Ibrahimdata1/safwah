@@ -2,6 +2,7 @@ import express from "express";
 import prisma from "../utils/prismaClient.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { create } from "domain";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -41,7 +42,11 @@ router.get("/books/:bookId/matn", async (req, res) => {
         bookId,
       },
       include: {
-        sharh: true,
+        sharh: {
+          include: {
+            footnotes: true,
+          },
+        },
         chapter: true,
       },
       orderBy: {
@@ -89,11 +94,18 @@ router.post("/books/:matnId/sharh", async (req, res) => {
     const newSharh = await prisma.sharh.create({
       data: {
         matnId,
+        scholar,
         arExplain,
         engExplain,
-        scholar,
-        footnoteAr,
-        footnoteEng,
+        footnotes:
+          footnoteAr.length > 0
+            ? {
+                create: {
+                  ar: footnoteAr,
+                  eng: footnoteEng,
+                },
+              }
+            : undefined,
       },
     });
     res.status(201).json({ data: newSharh });

@@ -24,10 +24,38 @@ function BookSharhPage() {
   const [chapters, setChapters] = useState([]);
   const [fontSize, setFontSize] = useState(18);
   const [currentPage, setCurrentPage] = useState(1);
+  const [groupMatn, setGroupMatn] = useState([]);
   const itemsPerPage = 3;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
 
+  useEffect(() => {
+    const fetchMatn = async () => {
+      const res = await axios.get(
+        `http://localhost:8080/api/books/${bookId}/matn`
+      );
+      setMatn(res.data.data);
+    };
+    fetchMatn();
+  }, [bookId]);
+  useEffect(() => {
+    if (!matn) return;
+    const filterMatn = matn.filter(
+      (mt) => !selectedChapter || mt.chapterId === selectedChapter
+    );
+    let group = [];
+    let i = 0;
+    while (i < filterMatn.length) {
+      const current = filterMatn[i];
+      if (current.sharh.length === 0) {
+        group.push(filterMatn.slice(i, i + 3));
+        i += 3;
+      } else {
+        group.push([current]);
+        i += 1;
+      }
+    }
+    setGroupMatn(group);
+    setCurrentPage(1);
+  }, [selectedChapter, matn]);
   useEffect(() => {
     if (chapters.length > 0 && !selectedChapter) {
       const mainChapter = chapters.find((chapter) => chapter.parentId === null);
@@ -45,21 +73,9 @@ function BookSharhPage() {
         }
       }
     }
-  }, [chapters]);
-  useEffect(() => {
-    const fetchMatn = async () => {
-      const res = await axios.get(
-        `http://localhost:8080/api/books/${bookId}/matn`
-      );
-      setMatn(res.data.data);
-    };
-    fetchMatn();
-  }, [bookId]);
-  if (!matn) return <Skeleton className="w-full h-64" />;
-  const filterMatn = matn.filter(
-    (mt) => !selectedChapter || mt.chapterId === selectedChapter
-  );
-  const paginationMatn = filterMatn.slice(startIndex, endIndex);
+  }, [chapters, matn]);
+  const paginationMatn = groupMatn[currentPage - 1] || [];
+  const totalPages = groupMatn.length;
   return (
     <div className="grid grid-cols-12 bg-[#121212f5]">
       <div className="col-span-1 ">
@@ -95,12 +111,7 @@ function BookSharhPage() {
                   <button
                     className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
                     onClick={() =>
-                      setCurrentPage((p) =>
-                        Math.min(
-                          p + 1,
-                          Math.ceil(filterMatn.length / itemsPerPage)
-                        )
-                      )
+                      setCurrentPage((p) => Math.min(p + 1, totalPages))
                     }
                   >
                     &rsaquo;
@@ -118,7 +129,7 @@ function BookSharhPage() {
                 </div>
               </div>
               <button
-                onClick={() => setFontSize((s) => Math.max(s - 2, 12))}
+                onClick={() => setFontSize((s) => Math.max(s - 2, 8))}
                 className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
               >
                 -A
@@ -135,24 +146,26 @@ function BookSharhPage() {
             {paginationMatn.map((mt) => (
               <div key={mt.id} className="mb-12">
                 <CardTitle
-                  className=" font-bold text-white font-rubik mb-2"
-                  style={{ fontSize: `${fontSize + 4}px` }}
+                  className=" font-bold text-white font-vazir mb-2 leading-relaxed "
+                  style={{ fontSize: `${fontSize}px` }}
                 >
                   {mt.arText}
                 </CardTitle>
                 <p
-                  className="text-lg font-roboto font-semibold text-white mb-2"
-                  style={{ fontSize: `${fontSize + 4}px` }}
+                  className=" font-roboto font-semibold text-white mb-2"
+                  style={{ fontSize: `${fontSize}px` }}
                 >
                   {mt.engText}
                 </p>
                 <Separator className="border-zinc-700 my-4" />
-                <p
-                  className="text-md font-roboto mb-4 text-gray-400"
-                  style={{ fontSize: `${fontSize - 2}px` }}
-                >
-                  Sharh by: {mt.sharh[0].scholar}
-                </p>
+                {mt.sharh.length > 0 && mt.sharh[0]?.scholar && (
+                  <p
+                    className=" font-roboto mb-4 text-gray-400"
+                    style={{ fontSize: `${fontSize - 2}px` }}
+                  >
+                    Sharh by: {mt.sharh[0].scholar}
+                  </p>
+                )}
                 {mt.sharh.map((sh) => (
                   <div key={sh.id} className="mb-6">
                     <p
@@ -175,7 +188,7 @@ function BookSharhPage() {
                       ))}
                     </p>
                     <p
-                      className="font-roboto"
+                      className="font-roboto text-lg"
                       style={{ fontSize: `${fontSize}px` }}
                     >
                       {sh.engExplain}
@@ -193,6 +206,7 @@ function BookSharhPage() {
           bookId={bookId}
           setSelectedChapter={setSelectedChapter}
           setChapters={setChapters}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </div>

@@ -1,13 +1,19 @@
 import { TreeView } from "@/components/tree-view";
 import axios from "axios";
 import { useEffect, useState } from "react";
-function ChapterScroll({ bookId, setSelectedChapter, setChapters }) {
+function ChapterScroll({
+  bookId,
+  setSelectedChapter,
+  setChapters,
+  setCurrentPage,
+}) {
   const handleSelect = (item) => {
     if (!item.id) {
       console.error("no item id from chapterScroll!");
       return;
     } else {
       setSelectedChapter(item.id);
+      setCurrentPage(1);
     }
   };
   const [treeData, setTreeData] = useState([]);
