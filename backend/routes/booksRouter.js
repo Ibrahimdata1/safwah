@@ -2,7 +2,6 @@ import express from "express";
 import prisma from "../utils/prismaClient.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import autoFormatText from "../utils/autoFormatText.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -62,7 +61,6 @@ router.get("/books/:bookId/matn", async (req, res) => {
 router.post("/books/:bookId/matn", async (req, res) => {
   const { bookId } = req.params;
   const { matnText, chapterId } = req.body;
-  const formatMatnText = autoFormatText(matnText);
   if (!bookId || !matnText) {
     console.error("missing bookId or arText from post matn");
     return res.status(400).json({ error: "bookId and arText are required." });
@@ -76,7 +74,7 @@ router.post("/books/:bookId/matn", async (req, res) => {
     const newmatn = await prisma.matn.create({
       data: {
         bookId,
-        matnText: formatMatnText,
+        matnText,
         order: count + 1,
         chapterId,
       },
@@ -90,19 +88,17 @@ router.post("/books/:bookId/matn", async (req, res) => {
 router.post("/books/:matnId/sharh", async (req, res) => {
   const { matnId } = req.params;
   const { sharhText, scholar, footnoteText } = req.body;
-  const formatSharhText = autoFormatText(sharhText);
-  const formatFootnoteText = autoFormatText(footnoteText);
   try {
     const newSharh = await prisma.sharh.create({
       data: {
         matnId,
         scholar,
-        sharhText: formatSharhText,
+        sharhText,
         footnotes:
           footnoteText.length > 0
             ? {
                 create: {
-                  footnoteText: formatFootnoteText,
+                  footnoteText,
                 },
               }
             : undefined,

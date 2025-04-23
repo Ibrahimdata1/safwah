@@ -113,14 +113,32 @@ function BookSharhPage() {
   const totalPages = groupMatn.length;
   function autoGroupMatnText(text) {
     const lines = text
-      .split(/\r?\n/)
+      .split(/\r?\n|\r/) // เพิ่มรองรับทั้ง \n และ \r
       .map((line) => line.trim())
       .filter((line) => line !== "");
+
     const grouped = [];
     for (let i = 0; i < lines.length; i += 2) {
       grouped.push(`${lines[i] || ""}\n${lines[i + 1] || ""}`);
     }
     return grouped;
+  }
+  function goToNextPage() {
+    if (currentPage < totalPages) {
+      setCurrentPage((p) => p + 1);
+    } else {
+      const currentIndex = chapters.findIndex((c) => c.id === selectedChapter);
+      const nextChapters = chapters.slice(currentIndex + 1);
+
+      for (const ch of nextChapters) {
+        const hasContent = matn.some((m) => m.chapterId === ch.id);
+        if (hasContent) {
+          setSelectedChapter(ch.id);
+          return;
+        }
+      }
+      // ไม่มี chapter ถัดไป → ไม่ทำอะไร
+    }
   }
   return (
     <div className="grid grid-cols-12 bg-[#121212f5]">
@@ -156,9 +174,7 @@ function BookSharhPage() {
                   />
                   <button
                     className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
-                    onClick={() =>
-                      setCurrentPage((p) => Math.min(p + 1, totalPages))
-                    }
+                    onClick={goToNextPage}
                   >
                     &rsaquo;
                   </button>
@@ -309,9 +325,7 @@ function BookSharhPage() {
                   />
                   <button
                     className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
-                    onClick={() =>
-                      setCurrentPage((p) => Math.min(p + 1, totalPages))
-                    }
+                    onClick={goToNextPage}
                   >
                     &rsaquo;
                   </button>

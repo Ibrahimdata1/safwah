@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
@@ -46,12 +46,14 @@ function PostMatn() {
         <form className="space-y-6 mt-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <Label className="font-medium">Matn Text</Label>
-            <Input
+            <Textarea
               name="matnText"
               value={matnText}
               onChange={(e) => setMatnText(e.target.value)}
               placeholder="type matn text..."
               required
+              className="w-full p-2 border rounded-md font-mono whitespace-pre-wrap"
+              dir="rtl"
             />
           </div>
           <Button type="submit" className="w-full cursor-pointer">
