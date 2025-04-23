@@ -91,8 +91,37 @@ function BookSharhPage() {
       }
     }
   }, [chapters, matn]);
+  useEffect(() => {
+    if (!selectedChapter || !matn || !chapters) return;
+
+    const selectedHasContent = matn.some(
+      (m) => m.chapterId === selectedChapter
+    );
+
+    // ถ้า chapter ที่ถูกเลือกไม่มีเนื้อหา
+    if (!selectedHasContent) {
+      const children = chapters.filter((c) => c.parentId === selectedChapter);
+      const firstChildWithContent = children.find((c) =>
+        matn.some((m) => m.chapterId === c.id)
+      );
+      if (firstChildWithContent) {
+        setSelectedChapter(firstChildWithContent.id);
+      }
+    }
+  }, [selectedChapter, matn, chapters]);
   const paginationMatn = groupMatn[currentPage - 1] || [];
   const totalPages = groupMatn.length;
+  function autoGroupMatnText(text) {
+    const lines = text
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line !== "");
+    const grouped = [];
+    for (let i = 0; i < lines.length; i += 2) {
+      grouped.push(`${lines[i] || ""}\n${lines[i + 1] || ""}`);
+    }
+    return grouped;
+  }
   return (
     <div className="grid grid-cols-12 bg-[#121212f5]">
       <div className="col-span-1 ">
@@ -166,31 +195,29 @@ function BookSharhPage() {
                   className=" font-bold text-white font-vazir mb-2 leading-relaxed "
                   style={{ fontSize: `${fontSize}px` }}
                 >
-                  {mt.matnText
-                    .split(/\n\n/) // แยกเป็นกลุ่ม ๆ (คู่ละ 2 บรรทัด)
-                    .map((pair, index) => {
-                      const lines = pair.split("\n");
-                      return (
-                        <div key={index} className="mb-6">
-                          {lines.map((line, i) => {
-                            const isArabic = /[\u0600-\u06FF]/.test(line);
-                            return (
-                              <p
-                                key={i}
-                                className={`leading-relaxed ${
-                                  isArabic
-                                    ? "font-vazir text-right"
-                                    : "font-roboto text-left"
-                                }`}
-                                style={{ fontSize: `${fontSize}px` }}
-                              >
-                                {line}
-                              </p>
-                            );
-                          })}
-                        </div>
-                      );
-                    })}
+                  {autoGroupMatnText(mt.matnText).map((pair, index) => {
+                    const lines = pair.split("\n");
+                    return (
+                      <div key={index} className="mb-6">
+                        {lines.map((line, i) => {
+                          const isArabic = /[\u0600-\u06FF]/.test(line);
+                          return (
+                            <p
+                              key={i}
+                              className={`leading-relaxed ${
+                                isArabic
+                                  ? "font-vazir text-right"
+                                  : "font-roboto text-left"
+                              }`}
+                              style={{ fontSize: `${fontSize}px` }}
+                            >
+                              {line}
+                            </p>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
                 </CardTitle>
               </div>
             ))}
@@ -255,7 +282,53 @@ function BookSharhPage() {
               );
             })}
           </CardContent>
-          <CardFooter></CardFooter>
+          <CardFooter className="flex justify-center">
+            <div className="flex items-center gap-2">
+              <div className="bg-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between text-sm rounded shadow">
+                <div className="space-x-1 rtl:space-x-reverse flex items-center">
+                  <button
+                    className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
+                    onClick={() => setCurrentPage(1)}
+                  >
+                    &laquo;
+                  </button>
+                  <button
+                    className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                  >
+                    &lsaquo;
+                  </button>
+                  <span>صفحة:</span>
+                  <input
+                    type="number"
+                    value={currentPage}
+                    onChange={(e) =>
+                      setCurrentPage(Math.max(1, parseInt(e.target.value || 1)))
+                    }
+                    className="w-14 text-center bg-zinc-700 text-white rounded cursor-pointer"
+                  />
+                  <button
+                    className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(p + 1, totalPages))
+                    }
+                  >
+                    &rsaquo;
+                  </button>
+                  <button
+                    className="px-2 py-1 bg-zinc-700 rounded cursor-pointer"
+                    onClick={() =>
+                      setCurrentPage(
+                        Math.ceil(filterMatn.length / itemsPerPage)
+                      )
+                    }
+                  >
+                    &raquo;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </CardFooter>
         </Card>
       </div>
       <div className="col-span-3">

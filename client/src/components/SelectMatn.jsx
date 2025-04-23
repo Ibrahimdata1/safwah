@@ -46,9 +46,9 @@ function SelectMatn({ getSelectMatnId, getSelectMatnText }) {
               {book.matn.map((mt) => (
                 <SelectItem
                   key={mt.id}
-                  value={JSON.stringify({ id: mt.id, text: mt.arText })}
+                  value={JSON.stringify({ id: mt.id, text: mt.matnText })}
                 >
-                  {mt.arText}
+                  {mt.matnText}
                 </SelectItem>
               ))}
             </SelectGroup>

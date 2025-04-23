@@ -1,33 +1,24 @@
 function autoFormatText(text) {
   const lines = text
-    .replace(/:\s*/g, ":\n") // เว้นหลัง :
-    .replace(/\.\s*/g, ".\n") // เว้นหลัง .
-    .split("\n")
+    .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line !== "");
+    .filter((line) => line !== "")
+    .map((line) => {
+      // ลบ – : ที่อยู่โดดๆ
+      line = line.replace(/^[–-]?\s*[:：]?\s*$/, "");
+      // รวมอายะฮ์ให้ดูดี: จากหลายบรรทัด -> [ซูเราะฮ์: เลข]
+      line = line.replace(
+        /([^\[])(النساء|المائدة|البقرة|يوسف|الزمر|يُونس|الأنبياء)\s*[:：]?\s*(\d+)/g,
+        "$1[$2: $3]"
+      );
+      return line;
+    });
 
   const grouped = [];
-  let tempGroup = { ar: [], en: [] };
-
-  lines.forEach((line) => {
-    const isArabic = /[\u0600-\u06FF]/.test(line);
-    if (isArabic) {
-      if (tempGroup.en.length > 0) {
-        grouped.push(`${tempGroup.ar.join("\n")}\n${tempGroup.en.join("\n")}`);
-        tempGroup = { ar: [], en: [] };
-      }
-      tempGroup.ar.push(line);
-    } else {
-      tempGroup.en.push(line);
-    }
-  });
-
-  // push อันสุดท้ายถ้าเหลือ
-  if (tempGroup.ar.length || tempGroup.en.length) {
-    grouped.push(`${tempGroup.ar.join("\n")}\n${tempGroup.en.join("\n")}`);
+  for (let i = 0; i < lines.length; i += 2) {
+    grouped.push(`${lines[i] || ""}\n${lines[i + 1] || ""}`);
   }
 
-  return grouped.join("\n\n"); // เว้นบรรทัดระหว่างคู่
+  return grouped.join("\n\n");
 }
-
 export default autoFormatText;

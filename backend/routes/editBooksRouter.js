@@ -1,7 +1,7 @@
 import express from "express";
 import prisma from "../utils/prismaClient.js";
 const router = express.Router();
-router.put("/edit/:matnId", async (req, res) => {
+router.put("/edit/matn/:matnId", async (req, res) => {
   const { matnId } = req.params;
   const { matnText } = req.body;
   try {
@@ -19,7 +19,7 @@ router.put("/edit/:matnId", async (req, res) => {
     res.status(500).json({ error });
   }
 });
-router.put("/edit/:sharhId", async (req, res) => {
+router.put("/edit/sharh/:sharhId", async (req, res) => {
   const { sharhId } = req.params;
   const { sharhText, scholar } = req.body;
   try {
@@ -38,7 +38,7 @@ router.put("/edit/:sharhId", async (req, res) => {
     res.status(500).json({ error });
   }
 });
-router.put("/edit/:footnoteId", async (req, res) => {
+router.put("/edit/footnotes/:footnoteId", async (req, res) => {
   const { footnoteId } = req.params;
   const { footnoteText } = req.body;
   try {

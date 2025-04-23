@@ -170,16 +170,11 @@ function BookSharhAdmin() {
           </div>
           <Textarea
             className="w-full p-2 border rounded mb-2"
-            value={m.arText}
-            onChange={(e) => handleChangeMatn(m.id, "arText", e.target.value)}
+            value={m.matnText}
+            onChange={(e) => handleChangeMatn(m.id, "matnText", e.target.value)}
             placeholder="Arabic Matn..."
           />
-          <Textarea
-            className="w-full p-2 border rounded mb-2"
-            value={m.engText}
-            onChange={(e) => handleChangeMatn(m.id, "engText", e.target.value)}
-            placeholder="English Matn..."
-          />
+
           {m.sharh.map((s) => (
             <div key={s.id} className="pl-4 border-1 mt-4">
               <div>
