@@ -113,13 +113,13 @@ function BookSharhPage() {
   const totalPages = groupMatn.length;
   function autoGroupMatnText(text) {
     const lines = text
-      .split(/\r?\n|\r/) // เพิ่มรองรับทั้ง \n และ \r
+      .split(/\r?\n|\r|\\n/)
       .map((line) => line.trim())
       .filter((line) => line !== "");
 
     const grouped = [];
     for (let i = 0; i < lines.length; i += 2) {
-      grouped.push(`${lines[i] || ""}\n${lines[i + 1] || ""}`);
+      grouped.push([lines[i] || "", lines[i + 1] || ""]);
     }
     return grouped;
   }
@@ -211,29 +211,26 @@ function BookSharhPage() {
                   className=" font-bold text-white font-vazir mb-2 leading-relaxed "
                   style={{ fontSize: `${fontSize}px` }}
                 >
-                  {autoGroupMatnText(mt.matnText).map((pair, index) => {
-                    const lines = pair.split("\n");
-                    return (
-                      <div key={index} className="mb-6">
-                        {lines.map((line, i) => {
-                          const isArabic = /[\u0600-\u06FF]/.test(line);
-                          return (
-                            <p
-                              key={i}
-                              className={`leading-relaxed ${
-                                isArabic
-                                  ? "font-vazir text-right"
-                                  : "font-roboto text-left"
-                              }`}
-                              style={{ fontSize: `${fontSize}px` }}
-                            >
-                              {line}
-                            </p>
-                          );
-                        })}
-                      </div>
-                    );
-                  })}
+                  {autoGroupMatnText(mt.matnText).map((pair, index) => (
+                    <div key={index} className="mb-6">
+                      {pair.map((line, i) => {
+                        const isArabic = /[\u0600-\u06FF]/.test(line);
+                        return (
+                          <p
+                            key={i}
+                            className={`leading-relaxed ${
+                              isArabic
+                                ? "font-vazir text-right"
+                                : "font-roboto text-left"
+                            }`}
+                            style={{ fontSize: `${fontSize}px` }}
+                          >
+                            {line}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </CardTitle>
               </div>
             ))}
