@@ -28,7 +28,7 @@ function BookSharhPage() {
   const [fontSize, setFontSize] = useState(18);
   const [currentPage, setCurrentPage] = useState(1);
   const [groupMatn, setGroupMatn] = useState([]);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [itemsPerPage] = useState(1);
   const [currentChapterPage, setCurrentChapterPage] = useState(1);
   const [totalChapterPages, setTotalChapterPages] = useState(0);
   const [chapterProgress, setChapterProgress] = useState({});
@@ -539,10 +539,9 @@ function BookSharhPage() {
                       </CardTitle>
                   )}
 
-                  {mt.sharh && mt.sharh.length > 0 && (
+                  {mt.sharh && mt.sharh.length > 0 && mt.sharh[currentSharhIndex] && (
                     <>
                       <Separator className="border-zinc-700 my-8" />
-                      
                       <div key={mt.sharh[currentSharhIndex].id} className="mb-8">
                         {mt.sharh[currentSharhIndex].scholar && (
                           <div ref={sharhRef} className="flex items-center gap-2 mb-6 bg-zinc-800/50 p-3 rounded-md">
@@ -558,20 +557,22 @@ function BookSharhPage() {
                           </div>
                         )}
 
-                        <div className="pl-4 border-l-2 border-zinc-800">
-                          <div className="relative mb-4">
-                            <p
-                              className="font-vazir text-right leading-relaxed whitespace-pre-wrap"
-                              style={{ 
-                                fontSize: `${fontSize}px`, 
-                                direction: 'rtl',
-                                lineHeight: '2'
-                              }}
-                            >
-                              {mt.sharh[currentSharhIndex].sharhText}
-                            </p>
+                        {mt.sharh[currentSharhIndex].sharhText && (
+                          <div className="pl-4 border-l-2 border-zinc-800">
+                            <div className="relative mb-4">
+                              <p
+                                className="font-vazir text-right leading-relaxed whitespace-pre-wrap"
+                                style={{ 
+                                  fontSize: `${fontSize}px`, 
+                                  direction: 'rtl',
+                                  lineHeight: '2'
+                                }}
+                              >
+                                {mt.sharh[currentSharhIndex].sharhText}
+                              </p>
+                            </div>
                           </div>
-                        </div>
+                        )}
 
                         {mt.sharh[currentSharhIndex].footnote && mt.sharh[currentSharhIndex].footnote.length > 0 && (
                           <div className="mt-6 text-right border-t border-zinc-800 pt-4">
@@ -591,6 +592,7 @@ function BookSharhPage() {
                             ))}
                           </div>
                         )}
+
                         {mt.sharh.length > 1 && (
                           <div className="flex items-center justify-center gap-2 mb-6">
                             <button
@@ -612,7 +614,6 @@ function BookSharhPage() {
                             </button>
                           </div>
                         )}
-             
                       </div>
                     </>
                   )}
