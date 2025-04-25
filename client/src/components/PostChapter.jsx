@@ -48,7 +48,8 @@ function PostChapter() {
       alert("Create Chapter Successful!");
       setName("");
       setParentId(null);
-      navigate(0);
+      const updatedChapters = await axios.get(`http://localhost:8080/api/books/${bookId}/chapters`);
+      setChapters(updatedChapters.data.data);
     } else {
       alert("Create Chapter Faild 500!");
     }

@@ -52,13 +52,35 @@ function PostSharh() {
         </div>
         <form className="space-y-6 mt-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
+            <Label className="font-medium">Scholar Name</Label>
+            <Input
+              name="scholar"
+              value={scholar}
+              onChange={(e) => setScholar(e.target.value)}
+              placeholder="Enter scholar name (e.g., Sheikh Fawzan)"
+              required
+              className="w-full p-2 border rounded-md"
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label className="font-medium">Text Sharh</Label>
+            <div className="mb-2 text-sm text-gray-500">
+              Format: Arabic text followed by two newlines, then English translation
+            </div>
             <Textarea
               name="sharhText"
               value={sharhText}
               onChange={(e) => setSharhText(e.target.value)}
-              placeholder="type arabic sharh ..."
+              placeholder="Type Arabic text followed by English translation..."
               required
+              className="w-full p-4 border rounded-md font-mono whitespace-pre-wrap min-h-[300px] leading-relaxed"
+              style={{
+                direction: 'rtl',
+                textAlign: 'right',
+                lineHeight: '2',
+                fontFamily: 'var(--font-vazirmatn), monospace'
+              }}
             />
           </div>
 
@@ -68,19 +90,17 @@ function PostSharh() {
               name="footnote"
               value={footnoteText}
               onChange={(e) => setFootnoteText(e.target.value)}
-              placeholder="type Footnote Arabic..."
+              placeholder="Type footnote text..."
+              className="w-full p-4 border rounded-md font-mono whitespace-pre-wrap"
+              style={{
+                direction: 'rtl',
+                textAlign: 'right',
+                lineHeight: '2',
+                fontFamily: 'var(--font-vazirmatn), monospace'
+              }}
             />
           </div>
-          <div className="space-y-2">
-            <Label className="font-medium">Scholar Name</Label>
-            <Input
-              name="scholar"
-              value={scholar}
-              onChange={(e) => setScholar(e.target.value)}
-              placeholder="type scholar name for this sharh ..."
-              required
-            />
-          </div>
+          
           <Button type="submit" className="w-full cursor-pointer">
             Add Sharh
           </Button>
